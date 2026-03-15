@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Homelab Portfolio — Zachary Neff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=DM+Sans:wght@300;400;500;600&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #080c10;
+    --surface:  #0d1117;
+    --card:     #111820;
+    --border:   #1e2d3d;
+    --accent:   #00e5ff;
+    --accent2:  #39ff6e;
+    --warn:     #ffc400;
+    --muted:    #4a6070;
+    --text:     #cdd9e5;
+    --text-dim: #7a9ab0;
+    --font-mono: 'Share Tech Mono', monospace;
+    --font-body: 'DM Sans', sans-serif;
+    --font-head: 'Orbitron', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Grid background ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,.025) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 60px 24px 100px;
+  }
+
+  /* ── Header ── */
+  header {
+    margin-bottom: 64px;
+    animation: fadeDown .6s ease both;
+  }
+
+  .tag-line {
+    font-family: var(--font-mono);
+    font-size: .75rem;
+    color: var(--accent);
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  header h1 {
+    font-family: var(--font-head);
+    font-size: clamp(1.8rem, 5vw, 3.2rem);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  header h1 span { color: var(--accent); }
+
+  .sub {
+    font-size: .95rem;
+    color: var(--text-dim);
+    margin-top: 14px;
+    max-width: 580px;
+    line-height: 1.7;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+  }
+
+  .pill {
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    padding: 4px 12px;
+    border-radius: 100px;
+    border: 1px solid;
+    letter-spacing: .1em;
+  }
+  .pill-blue  { border-color: var(--accent);  color: var(--accent); }
+  .pill-green { border-color: var(--accent2); color: var(--accent2); }
+  .pill-gold  { border-color: var(--warn);    color: var(--warn); }
+
+  /* ── Section label ── */
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    animation: fadeUp .5s ease both;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── Hardware card ── */
+  .hw-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 56px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    animation: fadeUp .5s ease .1s both;
+  }
+
+  @media (max-width: 600px) { .hw-card { grid-template-columns: 1fr; } }
+
+  .hw-card h3 {
+    font-family: var(--font-mono);
+    font-size: .75rem;
+    color: var(--accent);
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    grid-column: 1 / -1;
+  }
+
+  .hw-col ul { list-style: none; }
+  .hw-col li {
+    font-size: .88rem;
+    color: var(--text-dim);
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .hw-col li:last-child { border-bottom: none; }
+  .hw-col li::before {
+    content: '▸';
+    color: var(--accent);
+    font-size: .7rem;
+    flex-shrink: 0;
+  }
+  .hw-col li strong { color: var(--text); }
+
+  /* ── Project cards ── */
+  .project {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 40px;
+    overflow: hidden;
+    animation: fadeUp .5s ease both;
+  }
+
+  .project-header {
+    padding: 24px 32px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .project-num {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    color: var(--muted);
+    letter-spacing: .2em;
+    margin-bottom: 6px;
+  }
+
+  .project-title {
+    font-family: var(--font-head);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .status-badge {
+    font-family: var(--font-mono);
+    font-size: .65rem;
+    padding: 4px 12px;
+    border-radius: 100px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .live   { background: rgba(57,255,110,.12); border: 1px solid var(--accent2); color: var(--accent2); }
+  .mixed  { background: rgba(255,196,0,.1);   border: 1px solid var(--warn);    color: var(--warn); }
+
+  .project-body { padding: 28px 32px; }
+
+  /* ── Stack grid ── */
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+
+  .stack-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: var(--font-mono);
+    font-size: .75rem;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: border-color .2s, color .2s;
+  }
+  .stack-item:hover { border-color: var(--accent); color: var(--text); }
+  .stack-item .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: var(--accent2);
+  }
+  .stack-item .dot.planned { background: var(--warn); }
+
+  /* ── Sub-section headers ── */
+  .sub-head {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    color: var(--accent);
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    margin: 28px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── Challenge cards ── */
+  .challenge-list { display: flex; flex-direction: column; gap: 12px; }
+
+  .challenge {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 14px 18px;
+    transition: border-left-color .2s;
+  }
+  .challenge:hover { border-left-color: var(--accent2); }
+
+  .challenge-title {
+    font-size: .88rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .challenge-desc {
+    font-size: .82rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* ── Skills tags ── */
+  .skills-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+  }
+
+  .skill-tag {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    padding: 5px 12px;
+    border-radius: 6px;
+    background: rgba(0,229,255,.07);
+    border: 1px solid rgba(0,229,255,.2);
+    color: var(--accent);
+    letter-spacing: .05em;
+  }
+
+  /* ── Networking architecture ── */
+  .arch-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+    font-family: var(--font-mono);
+    font-size: .78rem;
+    color: var(--text-dim);
+    line-height: 1.9;
+  }
+  .arch-block .hl  { color: var(--accent); }
+  .arch-block .hl2 { color: var(--accent2); }
+  .arch-block .dim { color: var(--muted); }
+
+  /* ── Master skills section ── */
+  .skills-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 32px;
+    animation: fadeUp .5s ease both;
+  }
+
+  .skills-section h2 {
+    font-family: var(--font-head);
+    font-size: 1rem;
+    color: #fff;
+    margin-bottom: 24px;
+  }
+
+  .skill-category { margin-bottom: 22px; }
+  .skill-cat-label {
+    font-family: var(--font-mono);
+    font-size: .65rem;
+    color: var(--muted);
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── VM spec table ── */
+  .spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .83rem;
+    margin-top: 4px;
+  }
+  .spec-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+  .spec-table td:first-child {
+    font-family: var(--font-mono);
+    font-size: .75rem;
+    color: var(--muted);
+    width: 46%;
+  }
+  .spec-table td:last-child { color: var(--text); }
+  .spec-table tr:last-child td { border-bottom: none; }
+
+  .inline-note {
+    font-size: .78rem;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-top: 8px;
+  }
+
+  /* ── Topology / Infrastructure Overview ── */
+  .topo-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 56px;
+    animation: fadeUp .5s ease .15s both;
+  }
+
+  .topo-layer {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    position: relative;
+  }
+
+  .topo-layer-label {
+    font-family: var(--font-mono);
+    font-size: .63rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  /* connector lines between layers */
+  .topo-connector {
+    display: flex;
+    justify-content: center;
+    height: 28px;
+    position: relative;
+  }
+  .topo-connector::before {
+    content: '';
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent), var(--border));
+    opacity: .5;
+    border-radius: 2px;
+  }
+  .topo-connector-arrow {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 28px;
+    font-size: .6rem;
+    color: var(--accent);
+    opacity: .6;
+    margin-bottom: -2px;
+  }
+
+  /* Physical server card */
+  .topo-server {
+    background: linear-gradient(135deg, #0d1f35, #111820);
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+    padding: 18px 28px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    box-shadow: 0 0 24px rgba(0,229,255,.07);
+  }
+  .topo-server-icon {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+  }
+  .topo-server-name {
+    font-family: var(--font-head);
+    font-size: .95rem;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .topo-server-specs {
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    color: var(--text-dim);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .topo-server-specs span { color: var(--accent); }
+
+  /* Proxmox card */
+  .topo-proxmox {
+    background: var(--card);
+    border: 1px solid #2a3f55;
+    border-radius: 10px;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .topo-proxmox-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .topo-proxmox-name {
+    font-family: var(--font-head);
+    font-size: .85rem;
+    color: var(--accent2);
+  }
+  .topo-proxmox-sub {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    color: var(--muted);
+  }
+  .topo-proxmox-bridges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .bridge-tag {
+    font-family: var(--font-mono);
+    font-size: .65rem;
+    padding: 3px 10px;
+    border-radius: 6px;
+    background: rgba(0,229,255,.07);
+    border: 1px solid rgba(0,229,255,.2);
+    color: var(--accent);
+  }
+
+  /* Main split: storage | compute */
+  .topo-split {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 14px;
+    margin-top: 0;
+  }
+  @media (max-width: 700px) { .topo-split { grid-template-columns: 1fr; } }
+
+  .topo-col-label {
+    font-family: var(--font-mono);
+    font-size: .63rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: center;
+    padding: 10px 0 8px;
+    border-top: 1px dashed var(--border);
+  }
+
+  .topo-col-inner {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ZFS pool blocks */
+  .pool-block {
+    border-bottom: 1px solid var(--border);
+    padding: 12px 16px;
+  }
+  .pool-block:last-child { border-bottom: none; }
+
+  .pool-name {
+    font-family: var(--font-mono);
+    font-size: .75rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .pool-name.rpool  { color: #60a5fa; }
+  .pool-name.game   { color: var(--accent2); }
+  .pool-name.bulk   { color: var(--accent); }
+
+  .pool-meta {
+    font-family: var(--font-mono);
+    font-size: .65rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .pool-datasets { display: flex; flex-direction: column; gap: 4px; }
+  .pool-dataset {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    color: var(--text-dim);
+    padding: 4px 10px;
+    background: rgba(255,255,255,.03);
+    border-radius: 5px;
+    border-left: 2px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .pool-dataset .ds-name { color: var(--text); }
+  .pool-dataset .ds-meta { color: var(--muted); font-size: .62rem; }
+
+  /* Compute column */
+  .compute-group {
+    border-bottom: 1px solid var(--border);
+    padding: 12px 16px;
+  }
+  .compute-group:last-child { border-bottom: none; }
+
+  .compute-group-label {
+    font-family: var(--font-mono);
+    font-size: .63rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .vm-card {
+    background: rgba(0,229,255,.04);
+    border: 1px solid rgba(0,229,255,.15);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+  }
+  .vm-card:last-child { margin-bottom: 0; }
+
+  .vm-name {
+    font-family: var(--font-mono);
+    font-size: .75rem;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .vm-specs-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+  .vm-spec {
+    font-family: var(--font-mono);
+    font-size: .62rem;
+    padding: 2px 7px;
+    background: rgba(0,229,255,.08);
+    border-radius: 4px;
+    color: var(--text-dim);
+  }
+
+  .vm-services {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .vm-service {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    color: var(--text-dim);
+    padding: 3px 10px;
+    background: rgba(255,255,255,.03);
+    border-radius: 5px;
+    border-left: 2px solid var(--accent2);
+    display: flex;
+    justify-content: space-between;
+  }
+  .vm-service .svc-label { color: var(--text); }
+  .vm-service .svc-note  { color: var(--muted); font-size: .62rem; }
+
+  /* LXC container grid */
+  .lxc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 6px;
+  }
+  .lxc-chip {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    padding: 6px 10px;
+    background: rgba(57,255,110,.05);
+    border: 1px solid rgba(57,255,110,.15);
+    border-radius: 6px;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .lxc-chip::before {
+    content: '□';
+    color: var(--accent2);
+    font-size: .6rem;
+    flex-shrink: 0;
+  }
+  .lxc-chip .lxc-note {
+    font-size: .58rem;
+    color: var(--muted);
+    display: block;
+    margin-top: 1px;
+  }
+
+  .lxc-chip.dns {
+    background: rgba(255,196,0,.05);
+    border-color: rgba(255,196,0,.2);
+  }
+  .lxc-chip.dns::before { color: var(--warn); }
+
+  /* Network layer */
+  .topo-net {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .net-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0;
+  }
+
+  .net-item {
+    padding: 14px 18px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .net-item:last-child { border-right: none; }
+
+  .net-item-name {
+    font-family: var(--font-mono);
+    font-size: .73rem;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .net-item-name.green { color: var(--accent2); }
+  .net-item-name.gold  { color: var(--warn); }
+
+  .net-item-desc {
+    font-family: var(--font-mono);
+    font-size: .63rem;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  /* External row */
+  .topo-ext {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    padding: 16px 0 4px;
+  }
+  .ext-chip {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    padding: 6px 16px;
+    border-radius: 100px;
+    border: 1px dashed var(--border);
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .ext-chip .ext-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--muted);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ══ HEADER ══ -->
+  <header>
+    <p class="tag-line">// homelab infrastructure portfolio</p>
+    <h1>Zachary <span>Neff</span></h1>
+    <p class="sub">
+      Hands-on infrastructure, virtualization, networking, and automation built on enterprise
+      hardware. All projects are production-style deployments running in a self-managed homelab environment.
+    </p>
+    <div class="meta-row">
+      <span class="pill pill-blue">Dell PowerEdge R730xd</span>
+      <span class="pill pill-green">Proxmox VE 9.1</span>
+      <span class="pill pill-gold">3 Active Projects</span>
+      <span class="pill pill-blue">Last Updated: 2026-03-15</span>
+    </div>
+  </header>
+
+  <!-- ══ PROFESSIONAL CONTEXT ══ -->
+  <div style="background:linear-gradient(135deg, rgba(0,229,255,.05), rgba(57,255,110,.04));border:1px solid rgba(0,229,255,.2);border-radius:12px;padding:24px 32px;margin-bottom:48px;animation:fadeUp .5s ease .05s both;">
+    <p style="font-family:var(--font-mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">// why this exists</p>
+    <p style="font-size:.92rem;color:var(--text);line-height:1.8;max-width:780px;">
+      I work as an IT Consultant, Escalation Tech, and Field Services technician at a managed service provider in the Greater Phoenix Area, handling
+      client-facing technical work across networking, firewall configuration, and systems administration.
+      This homelab is where I go deeper — building and breaking real infrastructure on enterprise hardware
+      to develop the hands-on depth that translates directly to Network Engineer and Systems Administrator roles.
+      Everything here is self-managed, self-documented, and production-style by design.
+    </p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;">
+      <span class="pill pill-blue">IT Consultant / Escalation Tech / Field Services — MSP</span>
+      <span class="pill pill-green">Targeting: Network Engineer / Sysadmin</span>
+      <span class="pill pill-blue">Greater Phoenix Area</span>
+    </div>
+  </div>
+
+  <!-- ══ HARDWARE PLATFORM ══ -->
+  <p class="section-label">Hardware Platform</p>
+
+  <div class="hw-card">
+    <h3>// dell poweredge r730xd — primary host</h3>
+    <div class="hw-col">
+      <ul>
+        <li><strong>CPU:</strong> Dual Intel Xeon E5-2640 v3</li>
+        <li><strong>RAM:</strong> 112 GB DDR4 ECC</li>
+        <li><strong>Hypervisor:</strong> Proxmox VE 9.1</li>
+        <li><strong>Storage:</strong> ZFS (multi-pool)</li>
+      </ul>
+    </div>
+    <div class="hw-col">
+      <ul>
+        <li><strong>Management:</strong> iDRAC / IPMI</li>
+        <li><strong>Fan Control:</strong> Custom IPMI automation</li>
+        <li><strong>Guest OS:</strong> Linux (Ubuntu Server, Debian, Alpine via VMs &amp; LXC)</li>
+        <li><strong>Form Factor:</strong> Enterprise rack server</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══ INFRASTRUCTURE OVERVIEW ══ -->
+  <p class="section-label" style="animation-delay:.15s">Infrastructure Overview</p>
+
+  <div class="topo-wrap">
+
+    <!-- Physical Layer -->
+    <div class="topo-layer">
+      <div class="topo-layer-label">// physical hardware</div>
+      <div class="topo-server">
+        <div class="topo-server-icon">🖥</div>
+        <div>
+          <div class="topo-server-name">Dell PowerEdge R730xd</div>
+          <div class="topo-server-specs">
+            <span>Dual Xeon E5-2640 v3</span> &nbsp;·&nbsp;
+            <span>112 GB DDR4 ECC</span> &nbsp;·&nbsp;
+            <span>iDRAC / IPMI</span> &nbsp;·&nbsp;
+            <span>Custom Fan Curve (systemd)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Connector -->
+    <div class="topo-connector"></div>
+
+    <!-- Hypervisor Layer -->
+    <div class="topo-layer">
+      <div class="topo-layer-label">// hypervisor</div>
+      <div class="topo-proxmox">
+        <div class="topo-proxmox-left">
+          <div>
+            <div class="topo-proxmox-name">Proxmox VE 9.1</div>
+            <div class="topo-proxmox-sub">KVM + LXC · ZFS native · Snapshot support</div>
+          </div>
+        </div>
+        <div class="topo-proxmox-bridges">
+          <span class="bridge-tag">vmbr0 — LAN bridge</span>
+          <span class="bridge-tag">vmbr1 — WireGuard VPN bridge</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Connector -->
+    <div class="topo-connector"></div>
+
+    <!-- Storage + Compute split -->
+    <div class="topo-split">
+
+      <!-- Storage Column -->
+      <div>
+        <div class="topo-col-label">// zfs storage pools</div>
+        <div class="topo-col-inner">
+
+          <div class="pool-block">
+            <div class="pool-name rpool">rpool</div>
+            <div class="pool-meta">ZFS Mirror · Proxmox OS</div>
+            <div class="pool-datasets">
+              <div class="pool-dataset">
+                <span class="ds-name">/ (root)</span>
+                <span class="ds-meta">OS + config</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pool-block">
+            <div class="pool-name game">gamepool</div>
+            <div class="pool-meta">Primary Application Pool</div>
+            <div class="pool-datasets">
+              <div class="pool-dataset">
+                <span class="ds-name">vmdata</span>
+                <span class="ds-meta">recordsize=64K · VM disks</span>
+              </div>
+              <div class="pool-dataset">
+                <span class="ds-name">games</span>
+                <span class="ds-meta">recordsize=16K · world data</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pool-block">
+            <div class="pool-name bulk">bulk</div>
+            <div class="pool-meta">13.98 TB ZFS</div>
+            <div class="pool-datasets">
+              <div class="pool-dataset">
+                <span class="ds-name">/bulk/media</span>
+                <span class="ds-meta">bind → 7 LXCs</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pool-block">
+            <div class="pool-name" style="color:#a78bfa;">labpool</div>
+            <div class="pool-meta">1.60 TB · Lab &amp; testing</div>
+            <div class="pool-datasets">
+              <div class="pool-dataset">
+                <span class="ds-name">lab datasets</span>
+                <span class="ds-meta">testing environments</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pool-block">
+            <div class="pool-name" style="color:#fb923c;">backup</div>
+            <div class="pool-meta">996 GB · Snapshots &amp; backups</div>
+            <div class="pool-datasets">
+              <div class="pool-dataset">
+                <span class="ds-name">ZFS snapshots</span>
+                <span class="ds-meta">VM + data backups</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pool-block" style="background:rgba(255,255,255,.02);">
+            <div style="font-family:var(--font-mono);font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">// host-level zfs tuning</div>
+            <div class="pool-dataset" style="border-left-color:var(--warn);">
+              <span class="ds-name" style="color:var(--warn);">zfs_arc_max</span>
+              <span class="ds-meta">~24 GB · applies across all pools</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Compute Column -->
+      <div>
+        <div class="topo-col-label">// virtual machines &amp; containers</div>
+        <div class="topo-col-inner">
+
+          <!-- Game Server VM -->
+          <div class="compute-group">
+            <div class="compute-group-label">Virtual Machine</div>
+            <div class="vm-card">
+              <div class="vm-name">Ubuntu Game Server VM</div>
+              <div class="vm-specs-row">
+                <span class="vm-spec">32 cores</span>
+                <span class="vm-spec">1 socket</span>
+                <span class="vm-spec">64 GB RAM</span>
+                <span class="vm-spec">NUMA on</span>
+                <span class="vm-spec">HugePages</span>
+                <span class="vm-spec">No ballooning</span>
+                <span class="vm-spec">CPU pinned</span>
+                <span class="vm-spec">gamepool/vmdata</span>
+              </div>
+              <div class="vm-services">
+                <div class="vm-service">
+                  <span class="svc-label">AMP Panel</span>
+                  <span class="svc-note">→ Minecraft Server</span>
+                </div>
+                <div class="vm-service">
+                  <span class="svc-label">Pterodactyl</span>
+                  <span class="svc-note">→ Hytale Server</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Media Stack LXCs -->
+          <div class="compute-group">
+            <div class="compute-group-label">LXC Containers — Media Stack (9)</div>
+            <div class="lxc-grid">
+              <div class="lxc-chip">
+                Plex
+                <span class="lxc-note">streaming</span>
+              </div>
+              <div class="lxc-chip">
+                Sonarr
+                <span class="lxc-note">TV mgmt</span>
+              </div>
+              <div class="lxc-chip">
+                Radarr
+                <span class="lxc-note">movie mgmt</span>
+              </div>
+              <div class="lxc-chip">
+                Prowlarr
+                <span class="lxc-note">indexer</span>
+              </div>
+              <div class="lxc-chip">
+                Byparr
+                <span class="lxc-note">CF bypass</span>
+              </div>
+              <div class="lxc-chip">
+                qBittorrent
+                <span class="lxc-note">via VPN GW</span>
+              </div>
+              <div class="lxc-chip">
+                Overseerr
+                <span class="lxc-note">requests</span>
+              </div>
+              <div class="lxc-chip">
+                WireGuard
+                <span class="lxc-note">VPN gateway</span>
+              </div>
+              <div class="lxc-chip">
+                Nginx PM
+                <span class="lxc-note">reverse proxy</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- DNS LXC -->
+          <div class="compute-group">
+            <div class="compute-group-label">LXC Container — DNS</div>
+            <div class="lxc-grid">
+              <div class="lxc-chip dns">
+                AdGuard Home
+                <span class="lxc-note">DoH / DoT</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Connector -->
+    <div class="topo-connector"></div>
+
+    <!-- Network Layer -->
+    <div class="topo-layer">
+      <div class="topo-layer-label">// network &amp; security</div>
+      <div class="topo-net">
+        <div class="net-grid">
+          <div class="net-item">
+            <div class="net-item-name">Cloudflare Tunnel</div>
+            <div class="net-item-desc">Secure remote access<br>AMP + Pterodactyl panels<br>No inbound ports exposed</div>
+          </div>
+          <div class="net-item">
+            <div class="net-item-name green">Nginx Proxy Manager</div>
+            <div class="net-item-desc">SSL termination<br>Subdomain routing<br>Media stack services</div>
+          </div>
+          <div class="net-item">
+            <div class="net-item-name">WireGuard + ProtonVPN</div>
+            <div class="net-item-desc">VPN gateway on vmbr1<br>iptables NAT + kill switch<br>qBittorrent traffic only</div>
+          </div>
+          <div class="net-item">
+            <div class="net-item-name gold">AdGuard Home DNS</div>
+            <div class="net-item-desc">Network-wide sinkhole<br>Upstream: Cloudflare + Quad9<br>DoH / DoT — no plaintext DNS</div>
+          </div>
+          <div class="net-item" style="border-right:none">
+            <div class="net-item-name">UFW Firewall</div>
+            <div class="net-item-desc">Deny-by-default policy<br>Game ports explicitly opened<br>Management behind tunnel</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Connector -->
+    <div class="topo-connector"></div>
+
+    <!-- External Layer -->
+    <div class="topo-layer">
+      <div class="topo-layer-label">// external services</div>
+      <div class="topo-ext">
+        <div class="ext-chip"><span class="ext-dot"></span>Cloudflare (DNS + Tunnel)</div>
+        <div class="ext-chip"><span class="ext-dot"></span>ProtonVPN (WireGuard endpoint)</div>
+        <div class="ext-chip"><span class="ext-dot"></span>Cloudflare DoH / DoT</div>
+        <div class="ext-chip"><span class="ext-dot"></span>Quad9 DoH / DoT</div>
+        <div class="ext-chip"><span class="ext-dot"></span>Internet (game server ports)</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ PROJECT 1 ══ -->
+  <p class="section-label">Project 01</p>
+
+  <div class="project" style="animation-delay:.1s">
+    <div class="project-header">
+      <div>
+        <p class="project-num">// PROJECT 01</p>
+        <p class="project-title">Automated Media Server Stack</p>
+      </div>
+      <span class="status-badge live">● Live</span>
+    </div>
+
+    <div class="project-body">
+      <p style="font-size:.88rem;color:var(--text-dim);line-height:1.7;margin-bottom:24px;">
+        A fully automated media acquisition and streaming pipeline built on 9 LXC containers
+        within Proxmox VE. The stack handles end-to-end management from request through download,
+        indexing, organization, and playback — with all download traffic routed through a
+        WireGuard VPN kill-switch gateway.
+      </p>
+
+      <!-- Stack -->
+      <p class="sub-head">// Service Stack — 9 LXC Containers</p>
+      <div class="stack-grid">
+        <div class="stack-item"><span class="dot"></span>Plex</div>
+        <div class="stack-item"><span class="dot"></span>Sonarr</div>
+        <div class="stack-item"><span class="dot"></span>Radarr</div>
+        <div class="stack-item"><span class="dot"></span>Prowlarr</div>
+        <div class="stack-item"><span class="dot"></span>Byparr</div>
+        <div class="stack-item"><span class="dot"></span>qBittorrent</div>
+        <div class="stack-item"><span class="dot"></span>Overseerr</div>
+        <div class="stack-item"><span class="dot"></span>WireGuard + ProtonVPN</div>
+        <div class="stack-item"><span class="dot"></span>Nginx Proxy Manager</div>
+      </div>
+
+      <!-- ZFS -->
+      <p class="sub-head">// Storage — ZFS</p>
+      <div class="arch-block">
+        <span class="hl">bulk pool</span> &nbsp;·&nbsp; <span class="hl2">13.98 TB</span><br>
+        <span class="dim">└──</span> /bulk/media  <span class="dim">→</span>  bind-mounted into 7 LXC containers<br>
+        <span class="dim">└──</span> Unified read/write access across the entire stack<br>
+        <span class="dim">└──</span> ZFS native snapshotting available for backup
+      </div>
+
+      <!-- Networking -->
+      <p class="sub-head">// Networking &amp; Reverse Proxy</p>
+      <div class="arch-block">
+        <span class="hl">Nginx Proxy Manager</span>  →  SSL termination &amp; subdomain routing<br>
+        <span class="hl">WireGuard + ProtonVPN</span>  →  VPN gateway on Proxmox vmbr1 bridge<br>
+        <span class="dim">&nbsp;&nbsp;&nbsp;└──</span> iptables NAT rules applied<br>
+        <span class="dim">&nbsp;&nbsp;&nbsp;└──</span> Kill switch enforced — download traffic only exits via VPN<br>
+        <span class="dim">&nbsp;&nbsp;&nbsp;└──</span> Leak verification via ipleak.net<br>
+        <span class="hl">DNS</span>  →  Custom subdomains with SSL certificates via NPM
+      </div>
+
+      <!-- Technical Challenges -->
+      <p class="sub-head">// Technical Challenges Resolved</p>
+      <div class="challenge-list">
+        <div class="challenge">
+          <p class="challenge-title">ZFS Mirror Degraded — Live Repair</p>
+          <p class="challenge-desc">Diagnosed a degraded ZFS mirror caused by a vdev label mismatch. Performed a live detach and re-attach of the affected disk to rebuild the mirror without data loss or service interruption.</p>
+        </div>
+        <div class="challenge">
+          <p class="challenge-title">Cloudflare Bypass — FlareSolverr → Byparr Migration</p>
+          <p class="challenge-desc">FlareSolverr became non-functional after Cloudflare updated its anti-bot protections. Replaced with Byparr, which restores Prowlarr's ability to query protected indexers while remaining containerized.</p>
+        </div>
+        <div class="challenge">
+          <p class="challenge-title">Shared Storage Across 7 LXC Containers</p>
+          <p class="challenge-desc">Configured a single ZFS dataset (/bulk/media) as a bind-mounted shared volume accessible to all 7 media-handling containers, eliminating duplicate storage and ensuring consistent file paths across the pipeline.</p>
+        </div>
+        <div class="challenge">
+          <p class="challenge-title">WireGuard VPN Gateway with Kill Switch</p>
+          <p class="challenge-desc">Built a dedicated WireGuard VPN container acting as the network gateway for all download traffic. Configured iptables NAT rules and a kill switch on Proxmox's vmbr1 bridge, ensuring all qBittorrent traffic routes exclusively through ProtonVPN.</p>
+        </div>
+      </div>
+
+      <!-- Skills -->
+      <p class="sub-head">// Skills Demonstrated</p>
+      <div class="skills-wrap">
+        <span class="skill-tag">Proxmox VE Admin</span>
+        <span class="skill-tag">ZFS Storage &amp; Troubleshooting</span>
+        <span class="skill-tag">Linux &amp; LXC Containers</span>
+        <span class="skill-tag">Reverse Proxy / SSL</span>
+        <span class="skill-tag">VPN &amp; Network Privacy</span>
+        <span class="skill-tag">Linux Networking &amp; Routing</span>
+        <span class="skill-tag">Service Automation &amp; Pipelines</span>
+        <span class="skill-tag">DNS &amp; Certificate Management</span>
+        <span class="skill-tag">iptables / NAT</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PROJECT 2 ══ -->
+  <!-- ══ PROJECT 2 ══ -->
+  <p class="section-label" style="animation-delay:.2s">Project 02</p>
+
+  <div class="project" style="animation-delay:.25s">
+    <div class="project-header">
+      <div>
+        <p class="project-num">// PROJECT 02</p>
+        <p class="project-title">Game Hosting Infrastructure</p>
+      </div>
+      <span class="status-badge live">● Live</span>
+    </div>
+
+    <div class="project-body">
+      <p style="font-size:.88rem;color:var(--text-dim);line-height:1.7;margin-bottom:24px;">
+        A performance-optimized game server hosting platform running on a dedicated Ubuntu VM with
+        two active management panels — AMP and Pterodactyl. Server fan cooling is automated via a
+        custom IPMI script, and management access is secured externally through Cloudflare Tunnel.
+      </p>
+
+      <!-- VM Specs -->
+      <p class="sub-head">// Dedicated Game Server VM — Optimization Config</p>
+      <table class="spec-table">
+        <tr><td>CPU Sockets</td><td>1 socket (NUMA-aligned)</td></tr>
+        <tr><td>CPU Cores</td><td>Up to 32 cores assigned</td></tr>
+        <tr><td>NUMA</td><td>Enabled</td></tr>
+        <tr><td>RAM</td><td>64 GB DDR4</td></tr>
+        <tr><td>Memory Ballooning</td><td>Disabled (fixed allocation)</td></tr>
+        <tr><td>HugePages</td><td>Enabled</td></tr>
+        <tr><td>OS</td><td>Ubuntu Server</td></tr>
+        <tr><td>Storage</td><td>ZFS gamepool (vmdata + games datasets)</td></tr>
+      </table>
+      <p class="inline-note">VM tuned for stable TPS — ballooning disabled and HugePages enabled to reduce memory latency under sustained load.</p>
+
+      <!-- Management Stack -->
+      <p class="sub-head">// Management Stack</p>
+      <div class="stack-grid">
+        <div class="stack-item"><span class="dot"></span>AMP Panel</div>
+        <div class="stack-item"><span class="dot"></span>Pterodactyl</div>
+        <div class="stack-item"><span class="dot"></span>Cloudflare Tunnel</div>
+        <div class="stack-item"><span class="dot"></span>UFW Firewall</div>
+        <div class="stack-item"><span class="dot"></span>IPMI Fan Script</div>
+        <div class="stack-item"><span class="dot"></span>systemd Services</div>
+      </div>
+
+      <!-- Active Servers -->
+      <p class="sub-head">// Active Game Servers</p>
+      <div class="stack-grid">
+        <div class="stack-item" style="grid-column: span 1">
+          <span class="dot"></span>
+          <span>
+            <span style="color:var(--text);display:block;margin-bottom:2px;">Minecraft Server</span>
+            <span style="font-size:.68rem;color:var(--muted);">Managed via AMP</span>
+          </span>
+        </div>
+        <div class="stack-item" style="grid-column: span 1">
+          <span class="dot"></span>
+          <span>
+            <span style="color:var(--text);display:block;margin-bottom:2px;">Hytale Server</span>
+            <span style="font-size:.68rem;color:var(--muted);">Managed via Pterodactyl</span>
+          </span>
+        </div>
+      </div>
+      <p class="inline-note">Each panel manages its respective server independently — demonstrating familiarity with both AMP and Pterodactyl workflows for provisioning, configuration, and live server management.</p>
+
+      <!-- ZFS -->
+      <p class="sub-head">// ZFS Storage Layout</p>
+      <div class="arch-block">
+        <span class="hl">rpool</span>  <span class="dim">—</span>  ZFS mirror  <span class="dim">→</span>  Proxmox OS<br>
+        <span class="hl">gamepool</span>  <span class="dim">—</span>  Application storage<br>
+        <span class="dim">&nbsp;&nbsp;&nbsp;├──</span> <span class="hl2">vmdata</span>  &nbsp;<span class="dim">recordsize=64K</span>&nbsp;  VM disk images<br>
+        <span class="dim">&nbsp;&nbsp;&nbsp;└──</span> <span class="hl2">games</span> &nbsp;&nbsp;<span class="dim">recordsize=16K</span>&nbsp;  Game world data
+      </div>
+
+      <!-- Performance Tuning -->
+      <p class="sub-head">// Performance Tuning</p>
+      <div class="arch-block">
+        <span class="hl">ZFS ARC</span>  →  Limited to ~24 GB to prevent memory contention with VMs<br>
+        <span class="hl">CPU Pinning</span>  →  Cores pinned to game server VM for consistent TPS<br>
+        <span class="hl">Dataset Separation</span>  →  VM disks and game world data on dedicated datasets<br>
+        <span class="hl">ZFS Snapshots</span>  →  Snapshot capability used for game world backups
+      </div>
+
+      <!-- Networking -->
+      <p class="sub-head">// Networking &amp; Security</p>
+      <div class="arch-block">
+        <span class="hl">Cloudflare Tunnel</span>  →  Secure remote access to management panels<br>
+        <span class="dim">&nbsp;&nbsp;&nbsp;└──</span> No inbound firewall ports exposed for management<br>
+        <span class="dim">&nbsp;&nbsp;&nbsp;└──</span> Panels inaccessible directly from the public internet<br>
+        <span class="hl">UFW</span>  →  Deny-by-default firewall policy<br>
+        <span class="dim">&nbsp;&nbsp;&nbsp;└──</span> Only game server ports (UDP/TCP) explicitly opened<br>
+        <span class="hl">DNS</span>  →  Subdomains for public-facing game servers<br>
+        <span class="dim">&nbsp;&nbsp;&nbsp;└──</span> DNS-only records used for game server UDP traffic
+      </div>
+
+      <!-- IPMI Automation -->
+      <p class="sub-head">// IPMI Fan Curve Automation</p>
+      <div class="arch-block">
+        <span class="hl">Tool:</span> ipmitool + custom Bash script<br>
+        <span class="dim">└──</span> Reads CPU &amp; system temps via  <span class="hl2">ipmitool sdr type temperature</span><br>
+        <span class="dim">└──</span> Dynamic fan curve maps temp → duty cycle %<br>
+        <span class="dim">└──</span> Manual fan mode toggled via IPMI raw commands<br>
+        <span class="dim">└──</span> Systemd service (<span class="hl2">dell-fan-curve.service</span>) runs at boot<br>
+        <span class="dim">└──</span> Verified: BMC response, kernel modules (ipmi_si, ipmi_devintf), live fan response
+      </div>
+
+      <!-- Skills -->
+      <p class="sub-head">// Skills Demonstrated</p>
+      <div class="skills-wrap">
+        <span class="skill-tag">Proxmox VM Optimization</span>
+        <span class="skill-tag">ZFS Storage Architecture</span>
+        <span class="skill-tag">ZFS ARC Tuning</span>
+        <span class="skill-tag">CPU Pinning</span>
+        <span class="skill-tag">ZFS Snapshots</span>
+        <span class="skill-tag">Linux Server Admin</span>
+        <span class="skill-tag">Game Server Infrastructure</span>
+        <span class="skill-tag">IPMI / iDRAC Automation</span>
+        <span class="skill-tag">Bash Scripting</span>
+        <span class="skill-tag">systemd Service Management</span>
+        <span class="skill-tag">Cloudflare Tunnel</span>
+        <span class="skill-tag">Firewall Policy (UFW)</span>
+        <span class="skill-tag">DNS Management</span>
+        <span class="skill-tag">Performance Tuning (HugePages / NUMA)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PROJECT 3 ══ -->
+  <p class="section-label" style="animation-delay:.3s">Project 03</p>
+
+  <div class="project" style="animation-delay:.35s">
+    <div class="project-header">
+      <div>
+        <p class="project-num">// PROJECT 03</p>
+        <p class="project-title">Network-Wide DNS Filtering with AdGuard Home</p>
+      </div>
+      <span class="status-badge live">● Live</span>
+    </div>
+
+    <div class="project-body">
+      <p style="font-size:.88rem;color:var(--text-dim);line-height:1.7;margin-bottom:24px;">
+        A self-configured network-wide DNS sinkhole and filtering solution deployed in a dedicated
+        LXC container on Proxmox. All DNS traffic on the network is routed through AdGuard Home,
+        with encrypted upstream resolvers (DoH/DoT) replacing plaintext DNS entirely. Blocklists
+        cover ads, trackers, and malicious domains across every device on the network.
+      </p>
+
+      <!-- Stack -->
+      <p class="sub-head">// Service Stack</p>
+      <div class="stack-grid">
+        <div class="stack-item"><span class="dot"></span>AdGuard Home</div>
+        <div class="stack-item"><span class="dot"></span>DNS over HTTPS (DoH)</div>
+        <div class="stack-item"><span class="dot"></span>DNS over TLS (DoT)</div>
+        <div class="stack-item"><span class="dot"></span>LXC Container</div>
+        <div class="stack-item"><span class="dot"></span>Proxmox VE</div>
+      </div>
+
+      <!-- DNS Architecture -->
+      <p class="sub-head">// DNS Architecture</p>
+      <div class="arch-block">
+        <span class="hl">Network devices</span>  →  Router upstream DNS  →  <span class="hl2">AdGuard Home LXC</span><br>
+        <span class="dim">&nbsp;&nbsp;&nbsp;└──</span> All DNS queries filtered through sinkhole before resolution<br>
+        <span class="hl2">AdGuard Home</span>  →  Encrypted upstream resolvers<br>
+        <span class="dim">&nbsp;&nbsp;&nbsp;├──</span> <span class="hl">Cloudflare</span>  (DoH / DoT)<br>
+        <span class="dim">&nbsp;&nbsp;&nbsp;└──</span> <span class="hl">Quad9</span>  (DoH / DoT)  — malware-blocking resolver<br>
+        No plaintext DNS leaves the network
+      </div>
+
+      <!-- Blocklists -->
+      <p class="sub-head">// Blocklist Stack</p>
+      <div class="arch-block">
+        <span class="hl2">AdGuard DNS Filter</span>  &nbsp;—&nbsp; Primary ad &amp; tracker blocklist<br>
+        <span class="hl2">EasyList</span>  &nbsp;—&nbsp; Extended ad network coverage<br>
+        <span class="hl2">Steven Black Hosts</span>  &nbsp;—&nbsp; Consolidated hosts-based blocklist
+      </div>
+
+      <!-- Technical Challenges -->
+      <p class="sub-head">// Technical Challenges Resolved</p>
+      <div class="challenge-list">
+        <div class="challenge">
+          <p class="challenge-title">Encrypted Upstream DNS — Eliminating Plaintext Resolution</p>
+          <p class="challenge-desc">Configured AdGuard Home to use DoH and DoT resolvers (Cloudflare, Quad9) as upstream providers, ensuring all DNS queries leaving the network are encrypted. Plaintext UDP/53 queries to external resolvers are no longer used.</p>
+        </div>
+        <div class="challenge">
+          <p class="challenge-title">Blocklist Stack &amp; Network-Wide Integration</p>
+          <p class="challenge-desc">Deployed and tuned multiple blocklists (AdGuard DNS Filter, EasyList, Steven Black hosts) to balance coverage and false positives. Pointed the router's upstream DNS to the LXC container IP, applying filtering across all devices on the network without per-device configuration.</p>
+        </div>
+      </div>
+
+      <!-- Skills -->
+      <p class="sub-head">// Skills Demonstrated</p>
+      <div class="skills-wrap">
+        <span class="skill-tag">LXC Container Deployment</span>
+        <span class="skill-tag">DNS Sinkhole Configuration</span>
+        <span class="skill-tag">Encrypted DNS (DoH / DoT)</span>
+        <span class="skill-tag">Blocklist Management</span>
+        <span class="skill-tag">Network-Wide DNS Integration</span>
+        <span class="skill-tag">Router DNS Configuration</span>
+        <span class="skill-tag">Proxmox LXC Networking</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ COMBINED SKILLS ══ -->
+  <p class="section-label" style="animation-delay:.35s">Aggregate Skills</p>
+
+  <div class="skills-section" style="animation-delay:.4s">
+    <h2>Full Skill Set Across Projects</h2>
+
+    <div class="skill-category">
+      <p class="skill-cat-label">// Virtualization &amp; Hypervisor</p>
+      <div class="skills-wrap">
+        <span class="skill-tag">Proxmox VE 9.1 Administration</span>
+        <span class="skill-tag">LXC Container Management</span>
+        <span class="skill-tag">VM Architecture &amp; Optimization</span>
+        <span class="skill-tag">HugePages &amp; NUMA Configuration</span>
+        <span class="skill-tag">VM Templates &amp; Cloning</span>
+      </div>
+    </div>
+
+    <div class="skill-category">
+      <p class="skill-cat-label">// Storage</p>
+      <div class="skills-wrap">
+        <span class="skill-tag">ZFS Pool Design &amp; Management</span>
+        <span class="skill-tag">ZFS Mirror Repair (Live)</span>
+        <span class="skill-tag">Dataset Tuning (recordsize)</span>
+        <span class="skill-tag">Bind Mount Storage Architecture</span>
+        <span class="skill-tag">ZFS Snapshotting</span>
+      </div>
+    </div>
+
+    <div class="skill-category">
+      <p class="skill-cat-label">// Networking &amp; Security</p>
+      <div class="skills-wrap">
+        <span class="skill-tag">WireGuard VPN Gateway</span>
+        <span class="skill-tag">Cloudflare Tunnel</span>
+        <span class="skill-tag">Nginx Proxy Manager / Reverse Proxy</span>
+        <span class="skill-tag">iptables NAT &amp; Routing</span>
+        <span class="skill-tag">UFW Firewall Policy</span>
+        <span class="skill-tag">DNS &amp; Subdomain Management</span>
+        <span class="skill-tag">SSL Certificate Management</span>
+        <span class="skill-tag">VPN Kill Switch Implementation</span>
+        <span class="skill-tag">DNS Sinkhole (AdGuard Home)</span>
+        <span class="skill-tag">Encrypted DNS (DoH / DoT)</span>
+        <span class="skill-tag">Blocklist Management</span>
+      </div>
+    </div>
+
+    <div class="skill-category">
+      <p class="skill-cat-label">// Linux &amp; Automation</p>
+      <div class="skills-wrap">
+        <span class="skill-tag">Ubuntu Server Administration</span>
+        <span class="skill-tag">Bash Scripting</span>
+        <span class="skill-tag">systemd Service Creation</span>
+        <span class="skill-tag">IPMI / iDRAC Automation</span>
+        <span class="skill-tag">Linux Networking &amp; Kernel Modules</span>
+        <span class="skill-tag">Service Pipeline Automation</span>
+      </div>
+    </div>
+
+    <div class="skill-category" style="margin-bottom:0">
+      <p class="skill-cat-label">// Hardware &amp; Infrastructure</p>
+      <div class="skills-wrap">
+        <span class="skill-tag">Enterprise Server Management (Dell R730xd)</span>
+        <span class="skill-tag">iDRAC / IPMI Remote Management</span>
+        <span class="skill-tag">Fan Thermal Management</span>
+        <span class="skill-tag">AMP Game Server Panel</span>
+        <span class="skill-tag">Pterodactyl Panel</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
